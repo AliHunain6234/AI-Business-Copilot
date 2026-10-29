@@ -15,12 +15,7 @@ python app.py
 
 Open `http://127.0.0.1:8000`
 
-Default login:
-
-```text
-admin@aibusiness.com
-admin123
-```
+Login: `admin@aibusiness.com`. No password is stored in the code. Set `ADMIN_PASSWORD` in `.env` before `python seed.py`, or use the random one `seed.py` prints (shown once). Also set a long random `SECRET_KEY` in `.env`; without it a random key is used and everyone is logged out on restart.
 
 ## Where is the AI Business Copilot?
 

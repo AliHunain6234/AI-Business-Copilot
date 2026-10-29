@@ -1,12 +1,19 @@
 from datetime import datetime, timedelta, timezone
 import os
+import secrets
 from pathlib import Path
 from dotenv import load_dotenv
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 
 load_dotenv(Path(__file__).resolve().parent / '.env')
-SECRET_KEY = os.getenv('SECRET_KEY', 'please-change-this-secret-key')
+# Never sign login tokens with a key that is written in the source code: a missing or placeholder
+# SECRET_KEY gets a random key for this run (everyone is logged out on restart).
+_PLACEHOLDER_KEYS = {'', 'please-change-this-secret-key', 'change-this-to-a-long-random-production-secret'}
+SECRET_KEY = os.getenv('SECRET_KEY', '').strip()
+if SECRET_KEY in _PLACEHOLDER_KEYS:
+    SECRET_KEY = secrets.token_urlsafe(48)
+    print('WARNING: SECRET_KEY is not set in .env; using a random key for this run. Set a long random SECRET_KEY to keep logins across restarts.')
 ALGORITHM = 'HS256'
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
