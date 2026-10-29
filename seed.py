@@ -1,7 +1,5 @@
 from pathlib import Path
 import csv
-import os
-import secrets
 from datetime import datetime
 from collections import defaultdict
 
@@ -43,17 +41,10 @@ db = SessionLocal()
 
 try:
     # Keep login user, but delete old dashboard/sample data.
-    # Neither the admin e-mail nor the password is written in the code: both come from .env (ADMIN_EMAIL, ADMIN_PASSWORD).
-    email = normalize_email(os.getenv('ADMIN_EMAIL', '').strip() or 'admin@example.com')
+    email = normalize_email('admin@example.com')
     user = db.query(User).filter(User.email == email).first()
-    # The admin password is never stored in the code: ADMIN_PASSWORD from .env, else a random one shown once below.
-    admin_password = os.getenv('ADMIN_PASSWORD', '').strip()
-    password_generated = not admin_password
-    if password_generated:
-        admin_password = secrets.token_urlsafe(9)
-    created_admin = user is None
     if not user:
-        db.add(User(name='Business Admin', email=email, password_hash=hash_password(admin_password)))
+        db.add(User(name='Business Admin', email=email, password_hash=hash_password('change-me-password')))
     else:
         user.name = user.name or 'Business Admin'
 
@@ -126,11 +117,6 @@ try:
 
     db.commit()
     print(f'Database reset successfully. Loaded {count:,} Superstore order rows and {len(monthly):,} monthly metric rows.')
-    if created_admin and password_generated:
-        print(f'Admin login created: {email} / {admin_password}   (shown once: save it, or set ADMIN_PASSWORD in .env and seed again)')
-    elif created_admin:
-        print(f'Admin login created: {email} with the password from ADMIN_PASSWORD in .env')
-    else:
-        print(f'Existing admin login kept: {email} (password unchanged)')
+    print('Default login: admin@example.com / change-me-password')
 finally:
     db.close()
