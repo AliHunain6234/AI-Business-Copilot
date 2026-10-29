@@ -1,0 +1,9 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# secrets and local data (the database is rebuilt by `python seed.py`)
+.env
+*.db
+*.sqlite3

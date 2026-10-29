@@ -1,0 +1,20 @@
+{% extends 'base.html' %}{% set title='Dashboard | AI Business Copilot' %}{% block content %}
+<section class="dashboard section">
+  <div class="dash-head reveal-up"><div><span class="eyebrow">Executive dashboard</span><h1>AI Business Copilot</h1><p>Ask questions, read insights, and monitor performance from the Superstore database.</p></div><a class="btn ghost" href="/report/pdf">Download PDF Report</a></div>
+  <div class="kpi-grid">
+    <div class="kpi reveal-up"><span>Total Revenue</span><b>${{ '{:,.0f}'.format(data.revenue) }}</b><small>{{ data.growth }}% latest growth</small></div>
+    <div class="kpi reveal-up delay-1"><span>Quantity Sold</span><b>{{ '{:,}'.format(data.sales) }}</b><small>{{ data.sales_growth }}% quantity growth</small></div>
+    <div class="kpi reveal-up delay-2"><span>Customers</span><b>{{ '{:,}'.format(data.customers) }}</b><small>{{ data.customer_growth }}% customer growth</small></div>
+    <div class="kpi reveal-up delay-3"><span>Profit Margin</span><b>{{ data.conversion }}%</b><small>AOV ${{ '{:,.0f}'.format(data.average_order_value) }}</small></div>
+  </div>
+  <div class="dash-layout">
+    <section class="panel glass reveal-up"><div class="panel-title"><h2>Revenue Trend</h2><span>Monthly Superstore performance</span></div><div class="chart-bars">{% for m in data.months[-12:] %}<div title="{{ m.month }}: ${{ '{:,.0f}'.format(m.revenue) }}"><i style="height: {{ 20 + (m.revenue / (data.best_month.revenue or 1) * 75) }}%"></i><small>{{ m.month[5:] }}</small></div>{% endfor %}</div></section>
+    <aside class="copilot glass reveal-up delay-1">
+      <div class="copilot-head"><div class="bot-orb pulse">AI</div><div><h2>AI Copilot</h2><span>Ask about KPIs, forecast, marketing, or decisions</span></div></div>
+      <div id="chat" class="chat-box"><div class="msg ai">Hello. I am your AI Business Copilot. Ask me for a dashboard summary or action plan.</div></div>
+      <form id="askForm" class="ask-form"><input id="question" placeholder="Ask: What should we improve next?" autocomplete="off"><button>Ask</button></form>
+    </aside>
+  </div>
+  <section class="panel glass reveal-up insights"><div class="panel-title"><h2>AI Generated Insights</h2><span>Action-oriented recommendations</span></div>{% for item in insights %}<p>✦ {{ item }}</p>{% endfor %}</section>
+</section>
+{% endblock %}
