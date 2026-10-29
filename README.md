@@ -15,7 +15,7 @@ python app.py
 
 Open `http://127.0.0.1:8000`
 
-Login: `admin@aibusiness.com`. No password is stored in the code. Set `ADMIN_PASSWORD` in `.env` before `python seed.py`, or use the random one `seed.py` prints (shown once). Also set a long random `SECRET_KEY` in `.env`; without it a random key is used and everyone is logged out on restart.
+Login: no e-mail or password is stored in the code. Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in `.env` before `python seed.py` (without them the e-mail is `admin@example.com` and `seed.py` prints a random password, shown once). Also set a long random `SECRET_KEY` in `.env`; without it a random key is used and everyone is logged out on restart.
 
 ## Where is the AI Business Copilot?
 

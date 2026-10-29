@@ -43,7 +43,8 @@ db = SessionLocal()
 
 try:
     # Keep login user, but delete old dashboard/sample data.
-    email = normalize_email('admin@aibusiness.com')
+    # Neither the admin e-mail nor the password is written in the code: both come from .env (ADMIN_EMAIL, ADMIN_PASSWORD).
+    email = normalize_email(os.getenv('ADMIN_EMAIL', '').strip() or 'admin@example.com')
     user = db.query(User).filter(User.email == email).first()
     # The admin password is never stored in the code: ADMIN_PASSWORD from .env, else a random one shown once below.
     admin_password = os.getenv('ADMIN_PASSWORD', '').strip()
@@ -126,10 +127,10 @@ try:
     db.commit()
     print(f'Database reset successfully. Loaded {count:,} Superstore order rows and {len(monthly):,} monthly metric rows.')
     if created_admin and password_generated:
-        print(f'Admin login created: admin@aibusiness.com / {admin_password}   (shown once: save it, or set ADMIN_PASSWORD in .env and seed again)')
+        print(f'Admin login created: {email} / {admin_password}   (shown once: save it, or set ADMIN_PASSWORD in .env and seed again)')
     elif created_admin:
-        print('Admin login created: admin@aibusiness.com with the password from ADMIN_PASSWORD in .env')
+        print(f'Admin login created: {email} with the password from ADMIN_PASSWORD in .env')
     else:
-        print('Existing admin login kept: admin@aibusiness.com (password unchanged)')
+        print(f'Existing admin login kept: {email} (password unchanged)')
 finally:
     db.close()
